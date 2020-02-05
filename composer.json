@@ -1,5 +1,7 @@
 {
     "name": "zarlo/php-utils",
+    "description": "some utils for PHP",
+    "homepage": "https://github.com/zarlo/php-utils.git",
     "type": "library",
     "require": {},
     "autoload": {
@@ -10,5 +12,14 @@
     },
     "scripts": {
         "test": "phpunit --testdox tests"
-    }
+    },
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "zarlo",
+            "email": "zarlo5899@gmail.com",
+            "homepage": "https://zarlo.xyz"
+        }
+    ],
+    "version": "0.1.0"
 }
