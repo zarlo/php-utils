@@ -142,4 +142,32 @@ final class ZarrayTest extends TestCase
 
     }
 
+    public function testSet(): void
+    {
+
+        $array = new Zarray();
+        $array["test2"] = "boop";
+        $array->test4 = "beep";
+
+        $this->assertEquals(
+            ["test2" => "boop", "test4" => "beep"],
+            $array->to_array()
+        );
+
+    }
+
+    public function testGet(): void
+    {
+
+        $array = new Zarray();
+        $array["test2"] = "boop";
+        $array["test"] = "data";
+
+        $this->assertEquals(
+            "data",
+            $array->test
+        );
+
+    }
+
 }

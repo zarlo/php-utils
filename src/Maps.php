@@ -6,7 +6,7 @@ class Maps {
     /**
      * @return string
     */
-    private static function makeKeySafe(string $string)
+    private static function makeKeySafe(string $string) : string
     {
         return StringHelper::replaceAnyWith([" ", "."], "_", $string);
     } 
@@ -14,10 +14,10 @@ class Maps {
     /**
      * @return array
     */
-    public static function manyMap(array $data)
+    public static function manyMap($data) : array
     {
-        $output = [];
-
+        $output = new Zarray();
+        $data = Zarray::makeArray($data);
         $current = 0;
         foreach ($data as $value)
         {
@@ -27,30 +27,31 @@ class Maps {
             {
                 if ($i == $current)
                     continue;
-                $output = array_merge($output, [$key => $data[$i]]);
+                $output->append([$key => $data[$i]]);
             }
             $current++;
         }
         
-        return $output;
+        return $output->to_array();
     }
 
     /**
      * @return array
     */
-    public static function biMap(array $data)
+    public static function biMap($data) : array
     {
-        $output = [];
+        $output = new Zarray();
+        $data = Zarray::makeArray($data);
         foreach ($data as $key => $value)
         {
 
             $key_key = Maps::makeKeySafe($key);
             $value_key = Maps::makeKeySafe($value);
-            $output = array_merge($output, [$key_key => $value]);
-            $output = array_merge($output, [$value_key => $key]);
+            $output->append([$key_key => $value]);
+            $output->append([$value_key => $key]);
 
         }
-        return $output;
+        return $output->to_array();
     }
 
 }

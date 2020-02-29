@@ -11,7 +11,6 @@ class StringHelper {
         return $string;
     }
 
-
     public static function replace(array $data, string $string) : string
     {
 

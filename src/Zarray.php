@@ -1,9 +1,15 @@
 <?php
 namespace Zarlo\Utils;
 
-
-// i wanted a OOP array so no i have one
+// i wanted a OOP array so now i have one
 class Zarray implements \ArrayAccess, \Iterator {
+
+    public static function makeArray($array)
+    {
+        if($array instanceof Zarray)
+            return $array->to_array();
+        return $array;
+    }
 
     private $trueArray;
     private $hasZarray = false;
@@ -11,6 +17,16 @@ class Zarray implements \ArrayAccess, \Iterator {
     function __construct(?array $data = array())
     {
         $this->trueArray = $data;
+    }
+
+    public function __get($name) 
+    {
+        return $this->offsetGet($name);
+    }
+
+    public function __set($name, $value) 
+    {
+        $this->offsetSet($name, $value);
     }
 
     //ArrayAccess function
@@ -52,7 +68,6 @@ class Zarray implements \ArrayAccess, \Iterator {
         return count($this->trueArray);
     }
 
-
     public function append($data) : void
     {
         $this->trueArray = array_merge($this->trueArray, $data);
@@ -63,14 +78,18 @@ class Zarray implements \ArrayAccess, \Iterator {
         $this->trueArray = array_unshift($this->trueArray, $data);
     }
 
-    public function pop($data)
+    public function pop($data, $index = 0)
     {
-        return array_pop($this->trueArray);
+        if($index == 0)
+            return array_pop($this->trueArray);
+        if($index < 0)
+            $index = $this->length() + $index;
+        $item = $this->trueArray[$index];
+        unset($this->trueArray[$index]);
+        return $index;
     }
 
     //Iterator functions 
-
-
     public function map(callable $fn) : Zarray
     {
         $new = new Zarray();
@@ -109,10 +128,20 @@ class Zarray implements \ArrayAccess, \Iterator {
         return $this->current() !== false;
     }    
 
-    //Helper functions 
-    public function to_array()
+    //Helper functions
+    public function toArray($depth = -1) : array
     {
-        
+        return $this->to_array();
+    }
+
+    public function to_array($depth = -1) : array
+    {
+        if($depth == 0)
+            return null;
+            
+        if($depth !== -1)
+            $depth--;
+
         if(!$this->hasZarray)
             return $this->trueArray;
 
@@ -121,10 +150,15 @@ class Zarray implements \ArrayAccess, \Iterator {
         {
             if($value instanceof Zarray)
             {
-                $output[$key] = $value->to_array();
+                $output[$key] = $value->to_array($depth);
             }
         }
         return $output;
+    }
+
+    public function __toString() : string
+    {
+        return json_encode($this->to_array());
     }
 
 }

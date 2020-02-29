@@ -1,6 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use Zarlo\Utils\Maps;
+use Zarlo\Utils\Zarray;
 
 final class MapTest extends TestCase
 {
@@ -11,7 +12,8 @@ final class MapTest extends TestCase
                 "a" => "ab", 
                 "b" => "ba", 
                 "ba" => "b", 
-                "ab" => "a"],
+                "ab" => "a"
+            ],
             Maps::biMap(["a" => "ab", "b" => "ba"])
         );
     }
@@ -28,6 +30,34 @@ final class MapTest extends TestCase
                 "ac" => "ab"
             ],
             Maps::manyMap(["a", "ab", "ac"])
+        );
+    }
+
+    public function testZarrayBiMap(): void
+    {
+        $this->assertEquals(
+            [
+                "a" => "ab", 
+                "b" => "ba", 
+                "ba" => "b", 
+                "ab" => "a"
+            ],
+            Maps::biMap(new Zarray(["a" => "ab", "b" => "ba"]))
+        );
+    }
+
+    public function testZarrayManyMap(): void
+    {
+        $this->assertEquals(
+            [
+                "a" => "ab", 
+                "a" => "ac", 
+                "ab" => "a",
+                "ab" => "ac",
+                "ac" => "a",
+                "ac" => "ab"
+            ],
+            Maps::manyMap(new Zarray(["a", "ab", "ac"]))
         );
     }
 
